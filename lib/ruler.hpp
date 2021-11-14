@@ -10,29 +10,26 @@
 #include <exception>
 #include <functional>
 
-//#include "state_base.hpp"
 
 using std::literals::string_view_literals::operator""sv;
 
 
 namespace markdownItCpp {
 
-class state_base;
 //template<typename MarkdownIt>
-using FN = std::function<bool(state_base&,int,int,bool)>;
+//using FN = std::function<bool(state_base&,int,int,bool)>;
 
-//template<typename MarkdownIt>
-struct rule {
-    std::string name;
-    bool enable;
-    FN fn;
-    std::vector<std::string> alt;
-};
-
-
-//template<typename MarkdownIt>
+template<typename FN>
 class Ruler{
 public:
+
+    struct rule {
+        std::string name;
+        bool enable;
+        FN fn;
+        std::vector<std::string> alt;
+    };
+
     int __find__(std::string_view name){
         for(int i = 0;i< __rules__.size() ; ++i)
             if( __rules__[i].name == name)
@@ -122,10 +119,15 @@ public:
     std::enable_if_t<
         std::conjunction_v< std::is_same<STR, std::string>...>
         , void>
-     push(std::string_view ruleNmae,
+     push(std::string_view ruleName,
             FN fn,
             STR... alt_names
-            );
+    ){
+
+        rule t{std::string(ruleName),true,fn,{alt_names...}};
+        __rules__.push_back(std::move(t));
+        __cache__.clear();
+    }
     template<typename... STR>
     void enable(STR... names,bool ignoreInvalid=false);
 

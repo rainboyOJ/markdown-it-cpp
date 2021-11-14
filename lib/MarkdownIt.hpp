@@ -1,12 +1,12 @@
 
 #pragma once
 
+#include "define.hpp"
 #include "./parser_block.hpp"
 #include "./parser_core.hpp"
 #include "./rules_core/state_core.hpp"
 #include "./preset/preset.hpp"
 
-#include "MarkdownIt_base.hpp"
 
 namespace markdownItCpp {
 
@@ -35,7 +35,7 @@ public:
       #endif
   }
 
-  virtual const std::vector<FN>& getRules(std::string name,bool core) override{
+  virtual const std::vector<BlockFn>& getBlockRules(std::string name) override{
       return block.ruler.getRules(name);
   }
   virtual int getMaxNesting() override{

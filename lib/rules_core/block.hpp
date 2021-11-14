@@ -1,17 +1,16 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include "../state_base.hpp"
+#include "state_core.hpp"
 
 namespace markdownItCpp {
 
-bool block(state_base& state,int ,int, bool){
+void block(StateCore& state){
     if( state.inlineMode ){
         //TODO
     }
     else
         state.md.blockParse(state.src,state.md,state.env,state.tokens);
-    return true;
 }
 
 }

@@ -70,8 +70,6 @@ public:
 
 };
 
-using TokenArray = std::vector<Token>;
-using TokenArrayRef = std::vector<Token> &;
 
 } // end namespace markdownItCpp
 

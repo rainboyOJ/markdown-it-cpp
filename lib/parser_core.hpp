@@ -10,6 +10,7 @@
 #include <exception>
 #include <functional>
 
+#include "define.hpp"
 #include "ruler.hpp"
 
 #include "./rules_core/block.hpp"
@@ -17,20 +18,22 @@
 
 namespace markdownItCpp {
 
+
 class Core {
 public:
     Core(){
-        ruler.push("block",block,{});
+        ruler.push("block",block);
     }
-    void process(state_base & state){
+    void process(StateCore& state){
         //TODO
         auto rules = ruler.getRules("");
         for (const auto& r : rules) {
-            r(state,0,0,0);
+            r(state);
         }
     }
 
-    Ruler ruler;
+public:
+    Ruler<CoreFn> ruler;
 };
 
 };

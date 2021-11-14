@@ -10,6 +10,7 @@
 #include <exception>
 #include <functional>
 
+#include "define.hpp"
 #include "ruler.hpp"
 
 #include "./rules_block/state_block.hpp"
@@ -17,14 +18,13 @@
 
 namespace markdownItCpp {
     
-
-struct __rule_list {
+struct Block_rule_list {
     std::string name;
-    FN fn;
+    BlockFn fn;
     std::vector<std::string> alts;
 };
 
-const std::vector<__rule_list> _rules {
+const std::vector<Block_rule_list> _rules {
     { "paragraph",paragraph,{}}
 };
 
@@ -97,9 +97,8 @@ public:
     }
 
 public:
-    Ruler ruler;
+    Ruler<BlockFn> ruler;
     //StateBlock state;
-
 };
 
 } // end namespace markdownItCpp

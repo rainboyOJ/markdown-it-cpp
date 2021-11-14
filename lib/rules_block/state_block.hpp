@@ -3,44 +3,25 @@
 #include <string>
 #include <sstream>
 
+#include "../define.hpp"
 #include "../token.hpp"
 #include "../common/utils.hpp"
-#include "../state_base.hpp"
-#include "../MarkdownIt_base.hpp"
 
 namespace markdownItCpp {
 
 //typedef long long ll;
 //template<typename MarkdownIt>
 //class StateBlock : public state_base<MarkdownIt> {
-class StateBlock : public state_base {
+class StateBlock {
 public:
-    
-    //using state_base<MarkdownIt>::bMarks;
-    //using state_base<MarkdownIt>::eMarks;
-    //using state_base<MarkdownIt>::Shift;
-    //using state_base<MarkdownIt>::tShift;
-    //using state_base<MarkdownIt>::Count;
-    //using state_base<MarkdownIt>::sCount;
-    //using state_base<MarkdownIt>::bsCount;
-    //using state_base<MarkdownIt>::src;
-    //using state_base<MarkdownIt>::lineMax;
-    //using state_base<MarkdownIt>::level;
-    //using state_base<MarkdownIt>::tokens;
-    //using state_base<MarkdownIt>::line;
 
     StateBlock(std::string_view src,
-            MarkdownIt_base& md,
-            ENV env,
-            TokenArrayRef tokens
-            )
-        :state_base{src,md,env,tokens}
-        //src{src},md{md},env{env},tokens{tokens}
+                MarkdownIt_base& md,
+                ENV env,
+                TokenArrayRef tokens
+    ) :src{src},md{md},env{env},tokens{tokens}
     {
-        
         bool indent_found = false;
-
-  //var ch, s, start, pos, len, indent, offset, indent_found;
         int ch,start,pos,indent,offset,len = src.length();
         start = pos = indent = offset = 0;
         for(; pos < len; ++pos){
@@ -84,7 +65,7 @@ public:
 
     }
 
-    virtual class Token push(std::string type,std::string tag,int nesting) override {
+    class Token push(std::string type,std::string tag,int nesting)  {
         class Token token(type, tag, nesting);
         token.block = true;
         if( nesting < 0) level--; // closing
@@ -94,42 +75,42 @@ public:
         return token;
     }
 
-    bool isEmpty(int line) override{
+    bool isEmpty(int line) {
         return bMarks[line] + tShift[line] >= eMarks[line];
     }
-    virtual int skipEmptyLines(int from) override{
+    int skipEmptyLines(int from) {
         for( ; from < lineMax ; from++)
             if( !isEmpty(line)) break;
         return from;
     }
-    virtual int skipSpaces(int pos) override{
+    int skipSpaces(int pos) {
         for (; pos < src.length(); pos++){
             if( !isSpace(src[pos])) break;
         }
         return pos;
     }
     // 在min位置之后的最小是space的位置
-    virtual int skipSpacesBack(int pos,int _min) override{
+    int skipSpacesBack(int pos,int _min) {
         if( pos <=_min) return pos;
         while(pos > _min )
             if( !isSpace(src[--pos]))
                 return pos+1;
         return pos;
     }
-    virtual int skipChars(int pos,char code ) override{
+    int skipChars(int pos,char code ) {
         for (; pos < src.length(); pos++){
             if( src[pos] != code ) break;
         }
         return pos;
     }
-    virtual int skipCharsBack(int pos,char code,int _min) override{
+    int skipCharsBack(int pos,char code,int _min) {
         if( pos <=_min) return pos;
         while(pos > _min )
             if( src[--pos] != code )
                 return pos+1;
         return pos;
     }
-    virtual std::string getLines(int begin,int end,int indent,bool keepLastLF) override {
+    std::string getLines(int begin,int end,int indent,bool keepLastLF)  {
         if( begin >= end) return "";
         std::stringstream ss;
         int  lineIndent, ch, first, last, lineStart,
@@ -165,9 +146,33 @@ public:
         }
         return ss.str();
     }
-    //void Token() override;
+    //void Token() ;
 
 public:
+
+    using Array  = std::vector<int> ;
+    Array bMarks;   //line beign
+    Array eMarks;   //line end
+    Array tShift;   //第一个非空白字符 offset tabs not expand
+    Array sCount; //第一个非空白字符 offset tabs expand
+    Array bsCount;
+    int blkIndent{0};
+    int line{0};
+    int lineMax{0};
+    bool tight{false};
+    int ddIndent{-1};
+    int listIndent{-1};
+    std::string parentType{ "root"};
+    int level{0};
+    std::string result;
+
+    MarkdownIt_base& md;
+    std::string_view src;
+    ENV env;
+    TokenArrayRef tokens;
+
+    //state_core
+    bool inlineMode{false};
 
 };
 

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "state_block.hpp"
-#include "../state_base.hpp"
 
 namespace markdownItCpp {
 
@@ -12,7 +11,7 @@ namespace markdownItCpp {
 bool paragraph(
         //StateBlock& state,
         //state_base<MarkdownIt>& state,
-        state_base& state,
+        StateBlock& state,
         int startLine,
         int endLine = 0,
         bool silent = false
@@ -24,7 +23,7 @@ bool paragraph(
     int nextLine = startLine + 1;
 
     //auto terminatorRules = state.md.block.ruler.getRules("paragraph");
-    auto terminatorRules = state.md.getRules("paragraph",false);
+    auto terminatorRules = state.md.getBlockRules("paragraph");
     
     bool terminate;
     auto oldParentType = state.parentType;

@@ -3,23 +3,25 @@
 #include <sstream>
 
 //#include "../MarkdownIt.hpp"
-#include "../MarkdownIt_base.hpp"
+#include "../define.hpp"
 #include "../token.hpp"
 #include "../common/utils.hpp"
 
-#include "../state_base.hpp"
-
 namespace markdownItCpp {
 
-//template<typename MarkdownIt>
-//class StateCore :public state_base<MarkdownIt>{
-class StateCore :public state_base{
+class StateCore {
 public:
     StateCore(std::string_view src,MarkdownIt_base& md,ENV env,
             TokenArrayRef tokens
             )
-      :state_base(src,md,env,tokens)
+      :src{src},md{md},env{env},tokens{tokens}
     {}
+
+    MarkdownIt_base& md;
+    std::string src;
+    ENV env;
+    TokenArrayRef tokens;
+    bool inlineMode{false};
 };
 
 }
