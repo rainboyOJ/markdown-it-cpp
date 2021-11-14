@@ -53,6 +53,28 @@ public:
             attrs[idx].second.append(" " + value);
     }
 
+    friend std::ostream& operator<<(std::ostream& os,const Token & to){
+        os << "type: " << to.type << std::endl;
+        os << "tag: " << to.tag << std::endl;
+        os << "attrs: [";
+        for (const auto& e : to.attrs) 
+            os << '[' << e.first << ' '<<  e.second  << ']'<< std::endl;
+        os << "]" << std::endl;
+        os << "map: [" << to.map.first << ' ' << to.map.second << " ]" << std::endl;
+        os << "content: " << to.content << std::endl;
+        os << "info: " << to.info << std::endl;
+        os << "block: " << std::boolalpha  << to.block << std::endl;
+        os << "hidden: " << std::boolalpha  << to.hidden << std::endl;
+
+        os << "child :[ ";
+        for (const auto& e : to.children) os << e;
+        os << " ]" <<std::endl;
+
+
+        os << std::endl;
+        return os;
+    }
+
 public:
     std::string type;
     std::string tag;
@@ -61,7 +83,7 @@ public:
     int nesting;
     int level{0};
     std::vector<Token> children;
-    std::string content;
+    std::string_view content;
     std::string markup;
     std::string info;
     std::any meta;

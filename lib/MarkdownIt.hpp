@@ -32,6 +32,9 @@ public:
       core.process(state);
       #ifdef DEBUG
         dbg_one(state.tokens.size());
+        for (const auto& e : tokens) {
+            std::cout << e ;
+        }
       #endif
   }
 
