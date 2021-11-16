@@ -80,7 +80,7 @@ public:
     }
     int skipEmptyLines(int from) {
         for( ; from < lineMax ; from++)
-            if( !isEmpty(line)) break;
+            if( !isEmpty(from)) break;
         return from;
     }
     int skipSpaces(int pos) {
@@ -142,7 +142,7 @@ public:
             if( lineIndent > indent){
                 for(int j=1;j<=lineIndent-indent;++j) ss << " ";
             }
-            for(int j=first;j<=last;++j)        ss << src[j];
+            for(int j=first;j<last;++j)        ss << src[j];
         }
         return ss.str();
     }

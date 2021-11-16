@@ -9,8 +9,6 @@ namespace markdownItCpp {
 
 //template<typename MarkdownIt>
 bool paragraph(
-        //StateBlock& state,
-        //state_base<MarkdownIt>& state,
         StateBlock& state,
         int startLine,
         int endLine = 0,
@@ -22,7 +20,6 @@ bool paragraph(
     endLine      = state.lineMax;
     int nextLine = startLine + 1;
 
-    //auto terminatorRules = state.md.block.ruler.getRules("paragraph");
     auto terminatorRules = state.md.getBlockRules("paragraph");
     
     bool terminate;

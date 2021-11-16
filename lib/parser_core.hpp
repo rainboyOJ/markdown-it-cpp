@@ -13,16 +13,16 @@
 #include "define.hpp"
 #include "ruler.hpp"
 
-#include "./rules_core/block.hpp"
-
+#include "./rules_core/rules_core.hpp"
 
 namespace markdownItCpp {
 
 
 class Core {
 public:
-    Core(){
+    Core(){ // 加入需要的ruler
         ruler.push("block",block);
+        ruler.push("inline",Inline);
     }
     void process(StateCore& state){
         //TODO

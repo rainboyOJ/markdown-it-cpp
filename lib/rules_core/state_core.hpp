@@ -11,14 +11,14 @@ namespace markdownItCpp {
 
 class StateCore {
 public:
-    StateCore(std::string_view src,MarkdownIt_base& md,ENV env,
+    StateCore(std::string& src,MarkdownIt_base& md,ENV env,
             TokenArrayRef tokens
             )
       :src{src},md{md},env{env},tokens{tokens}
     {}
 
     MarkdownIt_base& md;
-    std::string src;
+    std::string& src;
     ENV env;
     TokenArrayRef tokens;
     bool inlineMode{false};

@@ -18,24 +18,12 @@
 
 namespace markdownItCpp {
     
-struct Block_rule_list {
-    std::string name;
-    BlockFn fn;
-    std::vector<std::string> alts;
-};
-
-const std::vector<Block_rule_list> _rules {
-    { "paragraph",paragraph,{}}
-};
-
 
 class ParserBlock {
 public:
     ParserBlock()
     {
-        for (const auto& e : _rules) {
-            ruler.push(e.name, e.fn, e.alts);
-        }
+        ruler.push("paragraph", paragraph);
     }
 
 
@@ -69,7 +57,7 @@ public:
             // - update `state.line`
             // - update `state.tokens`
             // - return true
-            for(int i=0;i<=rules.size()-1;++i){
+            for(int i=0;i<rules.size();++i){
                 ok =  rules[i](state,line,endLine,false);
                 if(ok) break;
             }
@@ -94,6 +82,13 @@ public:
         if( src.length() == 0) return;
         StateBlock state(src,md,env,outTokens);
         tokenize(state, state.line, state.lineMax);
+        #ifdef DEBUG
+        dbg_one(state.tokens.size());
+        for (const auto& e : state.tokens) {
+            std::cout << e ;
+        }
+        std::cout << "===========" << std::endl;
+        #endif
     }
 
 public:

@@ -11,7 +11,7 @@ struct optionsType {
   //- `false`. Set `true` to add '/' when closing single tags
     //(`<br />`). This is needed only for full CommonMark compatibility. In real
     //world you will need HTML output.
-  bool breaks; // `false`. Set `true` to convert `\n` in paragraphs into `<br>`.
+  bool breaks{false}; // `false`. Set `true` to convert `\n` in paragraphs into `<br>`.
   std::string langPrefix{"language-"};// - `language-`. CSS language class prefix for fenced blocks.
     //Can be useful for external highlighters.
 
