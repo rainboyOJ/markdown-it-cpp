@@ -9,6 +9,29 @@
 
 namespace markdownItCpp {
 
+struct LineInfo {
+    int bMarks;   //每一行开始 在原src的位置
+    int eMarks;   //每一行开始 在原src的位置
+    int tShift;   //第一个非空白字符 offset tabs not expand
+    int sCount;   //第一个非空白字符 offset tabs expand
+    int bsCount;  //都是0
+
+    LineInfo() = default;
+    LineInfo(int bMarks,int eMarks,int tShift,int sCount,int bsCount=0)
+        :bMarks{bMarks},   //每一行开始 在原src的位置
+        eMarks{eMarks},   //每一行开始 在原src的位置
+        tShift{tShift},   //第一个非空白字符 offset tabs not expand
+        sCount{sCount},   //第一个非空白字符 offset tabs expand
+        bsCount{bsCount}  //都是0
+    {}
+
+    //template<int MAX=4>
+    inline bool line_sCount_less(int MAX=4){ return sCount < MAX; }
+
+    inline bool isEmpty() { return bMarks + tShift >= eMarks; }
+
+};
+
 //typedef long long ll;
 //template<typename MarkdownIt>
 //class StateBlock : public state_base<MarkdownIt> {
@@ -42,11 +65,12 @@ public:
 
             if( ch == '\n' || pos == len - 1){
                 if( ch != '\n') pos++;
-                bMarks.push_back(start);
-                eMarks.push_back(pos);
-                tShift.push_back(indent);
-                sCount.push_back(offset);
-                bsCount.push_back(0);
+                //bMarks.push_back(start);
+                //eMarks.push_back(pos);
+                //tShift.push_back(indent);
+                //sCount.push_back(offset);
+                //bsCount.push_back(0);
+                lineInfo.emplace_back(start,pos,indent,offset,0);
 
                 indent_found = false;
                 indent = 0;
@@ -54,14 +78,15 @@ public:
                 start = pos+1;
             }
         }
+        //bMarks.push_back(len);
+        //eMarks.push_back(len);
+        //tShift.push_back(0);
+        //sCount.push_back(0);
+        //bsCount.push_back(0);
         //last Fake Line
-        bMarks.push_back(len);
-        eMarks.push_back(len);
-        tShift.push_back(0);
-        sCount.push_back(0);
-        bsCount.push_back(0);
+        lineInfo.emplace_back(len,len,0,0,0);
 
-        lineMax = bMarks.size()-1; //don't count last fake line
+        lineMax = lineInfo.size()-1; //don't count last fake line
 
     }
 
@@ -75,12 +100,9 @@ public:
         return token;
     }
 
-    bool isEmpty(int line) {
-        return bMarks[line] + tShift[line] >= eMarks[line];
-    }
     int skipEmptyLines(int from) {
         for( ; from < lineMax ; from++)
-            if( !isEmpty(from)) break;
+            if( !lineInfo[from].isEmpty()) break;
         return from;
     }
     int skipSpaces(int pos) {
@@ -97,6 +119,13 @@ public:
                 return pos+1;
         return pos;
     }
+
+
+    template<char ch>
+    inline bool isChar(int pos){
+        return src[pos] == ch;
+    }
+
     int skipChars(int pos,char code ) {
         for (; pos < src.length(); pos++){
             if( src[pos] != code ) break;
@@ -117,22 +146,22 @@ public:
              line = begin;
         for(int i=0; line < end;++i,++line){
             lineIndent = 0;
-            lineStart = first = bMarks[line];
+            lineStart = first = lineInfo[line].bMarks;
             //如何确定last的位置?
             if( line +1 < end || keepLastLF )
-                last = eMarks[line] +1;
+                last = lineInfo[line].eMarks +1;
             else
-                last = eMarks[line];
+                last = lineInfo[line].eMarks;
             //计算这一行的indent
             while ( first < last && lineIndent < indent  ) {
                 auto ch = static_cast<int>(src[first]);
                 if( isSpace(ch)){
                     if( ch == '\t')
-                        lineIndent += 4 - (lineIndent + bsCount[line]) % 4;
+                        lineIndent += 4 - (lineIndent + lineInfo[line].bsCount) % 4;
                     else
                         lineIndent++;
                 }
-                else if( first - lineStart < tShift[line])
+                else if( first - lineStart < lineInfo[line].tShift)
                     lineIndent++;
                 else break;
                 first++;
@@ -147,15 +176,21 @@ public:
         return ss.str();
     }
     //void Token() ;
+    template<int MAX_space = 4>
+    inline bool isCodeBlock(int line){ return lineInfo[line].sCount - blkIndent >= MAX_space; }
+
+    inline bool isEmpty(int line) { return lineInfo[line].isEmpty(); }
+    inline bool nest_less_blkIndent(int line){ return lineInfo[line].sCount < blkIndent; }
 
 public:
 
-    using Array  = std::vector<int> ;
-    Array bMarks;   //line beign
-    Array eMarks;   //line end
-    Array tShift;   //第一个非空白字符 offset tabs not expand
-    Array sCount; //第一个非空白字符 offset tabs expand
-    Array bsCount;
+    //using Array  = std::vector<int> ;
+    //Array bMarks;   //每一行开始 在原src的位置
+    //Array eMarks;   //每一行开始 在原src的位置
+    //Array tShift;   //第一个非空白字符 offset tabs not expand
+    //Array sCount;   //第一个非空白字符 offset tabs expand
+    //Array bsCount;  //都是0
+    std::vector<LineInfo> lineInfo;
     int blkIndent{0};
     int line{0};
     int lineMax{0};

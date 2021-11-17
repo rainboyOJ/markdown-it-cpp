@@ -34,4 +34,22 @@ std::string escapeHtml(std::string_view str){
     return result;
 }
 
+template<typename T,typename ... Args>
+bool AnyOf(T&& t,Args&&... args){
+    if constexpr ( sizeof...(args) == 0){
+        return false;
+    }
+    else {
+        return ( (t== args) || ... );
+    }
+}
+template<typename T,typename ... Args>
+bool NoneOneOf(T&& t,Args&&... args){
+    if constexpr ( sizeof...(args) == 0){
+        return true;
+    }
+    else
+        return ! AnyOf(std::forward<T>(t),std::forward<Args>(args)...);
+}
+
 } // end namespace markdownItCpp

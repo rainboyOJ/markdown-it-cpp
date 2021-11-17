@@ -27,13 +27,13 @@ bool paragraph(
     state.parentType = "paragraph"; //改变 parentType
 
     // jump line-by-line until empty one or EOF
-    for( ; nextLine < endLine && ! state.isEmpty(nextLine) ; nextLine++){
+    for( ; nextLine < endLine && ! state.lineInfo[nextLine].isEmpty() ; nextLine++){
         // code block normally
-        if( state.sCount[nextLine] - state.blkIndent > 3 )
+        if(  state.isCodeBlock(nextLine) /*state.sCount[nextLine] - state.blkIndent > 3*/ )
             continue;
 
         // quirk for blockquotes, this line should already be checked by that rule
-        if( state.sCount[nextLine] < 0 ) 
+        if( state.lineInfo[nextLine].sCount < 0 ) 
             continue;
 
         // Some tags can terminate paragraph without empty line.

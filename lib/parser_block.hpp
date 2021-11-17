@@ -42,7 +42,8 @@ public:
 
             // Termination condition for nested calls.
             // Nested calls currently used for blockquotes & lists
-            if( state.sCount[line] < state.blkIndent ) break;
+            //if( state.sCount[line] < state.blkIndent ) break;
+            if( state.nest_less_blkIndent(line)) break;
 
             // If nesting level exceeded - skip tail to the end. That's not ordinary
             // situation and we should not care about content.
