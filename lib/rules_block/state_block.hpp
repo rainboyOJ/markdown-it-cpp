@@ -90,7 +90,7 @@ public:
 
     }
 
-    class Token push(std::string type,std::string tag,int nesting)  {
+    class Token push(std::string_view type,std::string_view tag,int nesting)  {
         class Token token(type, tag, nesting);
         token.block = true;
         if( nesting < 0) level--; // closing
@@ -123,8 +123,7 @@ public:
 
     template<char ch>
     inline bool isChar(int pos){
-        return src[pos] == ch;
-    }
+        return src[pos] == ch; }
 
     int skipChars(int pos,char code ) {
         for (; pos < src.length(); pos++){

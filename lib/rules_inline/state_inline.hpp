@@ -28,8 +28,8 @@ public:
     void push(std::string_view type,std::string_view tag,int nesting){
         if( pending.length() ) //先把pending 加入
             pushPending();
-        Token t(std::string(type),std::string(tag),nesting);
-        //tokens_meta
+        Token t(type,tag,nesting);
+        //tokens_meta TODO
 
         if( nesting < 0){ //closing tag
             level--;

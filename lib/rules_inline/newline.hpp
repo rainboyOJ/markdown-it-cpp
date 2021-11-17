@@ -7,6 +7,11 @@
 #include "./state_inline.hpp"
 
 namespace markdownItCpp {
+
+constexpr auto hardbreak_type  = "hardbreak"sv;
+constexpr auto softbreak_type = "softbreak"sv;
+constexpr auto break_tag = "br"sv;
+
 /**
  * 作用: 处理换行符
  * pending 的末尾
@@ -27,15 +32,15 @@ bool newline(StateInline& state,bool silent) {
         if( pmax >= 0 && state.pending[pmax] == ' ' ){
             if( pmax >= 1 && state.pending[pmax-1] == ' ' ){
                 while ( state.pending.back() == ' ' )  state.pending.pop_back();
-                state.push("hardbreak", "br", 0);
+                state.push(hardbreak_type, break_tag, 0);
             }
             else {
                 state.pending.pop_back();
-                state.push("softbreak", "br", 0);
+                state.push(softbreak_type , break_tag, 0);
             }
         }
         else{
-            state.push("softbreak", "br", 0);
+            state.push(softbreak_type, break_tag, 0);
         }
     }
 

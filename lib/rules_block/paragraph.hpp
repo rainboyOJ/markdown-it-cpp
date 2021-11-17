@@ -53,7 +53,7 @@ bool paragraph(
     while ( content.length() && isSpace(content.back()) ) content.pop_back();
     state.line = nextLine;
     //state.push(std::string type, std::string tag, int nesting)
-    state.push("paragraph_open","p",1);
+    state.push(paragraph_open_type,paragraph_tag,1);
     state.tokens.back().map  = {startLine,state.line};
 
     state.push("inline","",0);
@@ -61,7 +61,7 @@ bool paragraph(
     state.tokens.back().map = {startLine,state.line};
     state.tokens.back().children.clear();
 
-    state.push("paragraph_close","p",-1);
+    state.push(paragraph_close_type ,paragraph_tag,-1);
     state.parentType = oldParentType;
     return true;
 }

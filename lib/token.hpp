@@ -8,14 +8,18 @@
 #include <any>
 #include <string_view>
 
+#include "./preset/token.hpp"
+
 //using namespace std::literals;
 using std::literals::string_view_literals::operator""sv;
 namespace markdownItCpp {
+
+    
 class Token {
 public:
     Token() = default;
-    Token(std::string type,std::string tag,int nesting)
-        :type{std::move(type)},tag{std::move(tag)},nesting{nesting}
+    Token(std::string_view type,std::string_view tag,int nesting)
+        :type{type},tag{tag},nesting{nesting}
     {}
 
     int attrIndex(std::string_view name){
@@ -75,16 +79,19 @@ public:
         return os;
     }
 
+    std::string tag_str(){ return std::string(tag); }
+    std::string type_str(){ return std::string(type); }
+
 public:
-    std::string type;
-    std::string tag;
+    std::string_view type;
+    std::string_view tag;
     std::vector<std::pair<std::string, std::string>> attrs;
     std::pair<int,int> map;
     int nesting;
     int level{0};
     std::vector<Token> children;
     std::string content;
-    std::string markup;
+    std::string_view markup;
     std::string info;
     std::any meta;
     bool block{false};

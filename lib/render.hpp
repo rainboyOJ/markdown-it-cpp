@@ -53,8 +53,7 @@ public:
             result += " ";
             result += escapeHtml(name);
             result += "=\"";
-            result += escapeHtml(attr);
-            result += "\"";
+            result += escapeHtml(attr); result += "\"";
         }
         return result;
     }
@@ -68,7 +67,7 @@ public:
         if( tok.block && tok.nesting != -1 && idx && toks[idx-1].hidden )
             result += '\n';
         // 加 token name <img
-        result += (tok.nesting == -1 ? "</" : "<") + tok.tag;
+        result += (tok.nesting == -1 ? "</" : "<") + tok.tag_str();
         // 加 token attr <img src="foo"
         result += renderAttrs(tok);
 
@@ -100,7 +99,7 @@ public:
     std::string renderInline(TokenArrayRef& toks,optionsType& opt,ENV& env){
         std::string result{};
         for(int i=0;i<toks.size();++i){
-            auto& type = toks[i].type;
+            auto type = toks[i].type_str();
             if( rules.count(type) != 0 )
                 result += rules[type](toks,i,opt,env);
             else
@@ -117,19 +116,23 @@ public:
     std::string render(TokenArrayRef& toks,optionsType& opt,ENV env){
         std::string result{};
         for(int i = 0 ;i < toks.size() ; ++i){
-            std::string_view type = toks[i].type;
+            auto type = toks[i].type_str();
             if( type == "inline")
                 result += renderInline(toks[i].children,opt,env);
-            else if( rules.count(toks[i].type) != 0)
-                result += rules[toks[i].type](toks,i,opt,env);
+            else if( rules.count(type) != 0)
+                result += rules[type](toks,i,opt,env);
             else 
                 result += renderToken(toks,i,opt);
         }
         return result;
-
+    }
+    //
+    default_render_ruleFn& getRules(std::string_view name){
+        return rules[std::string(name)];
     }
     
     std::unordered_map<std::string, default_render_ruleFn> rules;
+    
 };
 
 }
