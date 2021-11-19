@@ -52,4 +52,8 @@ bool NoneOneOf(T&& t,Args&&... args){
         return ! AnyOf(std::forward<T>(t),std::forward<Args>(args)...);
 }
 
+inline uint32_t uCodeChar(char c){
+    return static_cast<uint32_t>(c) & 0xff;
+}
+
 } // end namespace markdownItCpp

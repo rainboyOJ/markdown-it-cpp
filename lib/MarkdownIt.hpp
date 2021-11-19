@@ -50,6 +50,9 @@ public:
   virtual void blockParse(std::string_view src, MarkdownIt_base &md, ENV env, TokenArrayRef outTokens) override {
       block.parse(src,md,env,outTokens);
   }
+  virtual void blockTokenize(StateBlock& state,int s,int e) override {
+      block.tokenize(state, s, e);
+  }
   virtual void inlineParse(std::string_view src , MarkdownIt_base &md, ENV env, TokenArrayRef outTokens) override {
       m_inline.parse(src, md, env, outTokens);
   }

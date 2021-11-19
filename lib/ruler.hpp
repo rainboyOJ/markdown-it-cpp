@@ -115,16 +115,10 @@ public:
         __cache__.clear();
     }
 
-    template<typename... STR >
-    std::enable_if_t<
-        std::conjunction_v< std::is_same<STR, std::string>...>
-        , void>
-     push(std::string_view ruleName,
-            FN fn,
-            STR... alt_names
-    ){
+    void push(std::string_view ruleName, FN fn)
+    {
 
-        rule t{std::string(ruleName),true,fn,{alt_names...}};
+        rule t{std::string(ruleName),true,fn,{}};
         __rules__.push_back(std::move(t));
         __cache__.clear();
     }

@@ -1,5 +1,6 @@
 //基础的 定义
 #pragma once
+#include <functional>
 #include <string>
 #include <vector>
 #include "./preset/options.hpp"
@@ -49,6 +50,7 @@ public:
     virtual const std::vector<BlockFn>& getBlockRules(std::string) = 0;
     virtual int getMaxNesting() = 0;
     virtual void blockParse(std::string_view,MarkdownIt_base&,ENV,TokenArrayRef) = 0;
+    virtual void blockTokenize(StateBlock&,int,int) = 0;
     virtual void inlineParse(std::string_view src,MarkdownIt_base&,ENV,TokenArrayRef) = 0;
 };
 

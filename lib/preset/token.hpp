@@ -9,6 +9,10 @@ namespace markdownItCpp {
     constexpr auto paragraph_close_type = "paragraph_close"sv;
     constexpr auto paragraph_tag= "p"sv;
 
-    //markup
-    constexpr auto blockquotes_markup = ">"sv;
+
+
+    // char
+    constexpr uint32_t GREATER_CHAR = 0x3E; // >
+    constexpr uint32_t SPACE_CHAR   = 0x20; // ' '
+    constexpr uint32_t TAB_CHAR     = 0x09; // '\t'
 }

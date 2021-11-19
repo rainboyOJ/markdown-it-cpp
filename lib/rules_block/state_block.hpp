@@ -6,8 +6,12 @@
 #include "../define.hpp"
 #include "../token.hpp"
 #include "../common/utils.hpp"
+#include <cassert>
 
 namespace markdownItCpp {
+
+//BlockState parentType
+constexpr auto parentType_root = "root"sv;
 
 struct LineInfo {
     int bMarks;   //每一行开始 在原src的位置
@@ -25,10 +29,13 @@ struct LineInfo {
         bsCount{bsCount}  //都是0
     {}
 
+    inline int first_nospace_pos(){ return bMarks + tShift; }
+
     //template<int MAX=4>
     inline bool line_sCount_less(int MAX=4){ return sCount < MAX; }
 
     inline bool isEmpty() { return bMarks + tShift >= eMarks; }
+
 
 };
 
@@ -48,7 +55,7 @@ public:
         int ch,start,pos,indent,offset,len = src.length();
         start = pos = indent = offset = 0;
         for(; pos < len; ++pos){
-            ch = static_cast<int>(src[pos]);
+            auto ch = src[pos];
 
             if( !indent_found ) {
                 if(isSpace(ch)){
@@ -59,9 +66,8 @@ public:
                         offset++;
                     continue;
                 }
+                else indent_found = true;
             }
-            else
-                indent_found = true;
 
             if( ch == '\n' || pos == len - 1){
                 if( ch != '\n') pos++;
@@ -88,6 +94,9 @@ public:
 
         lineMax = lineInfo.size()-1; //don't count last fake line
 
+    }
+    void push(Token & t)  {
+        tokens.push_back(t);
     }
 
     class Token push(std::string_view type,std::string_view tag,int nesting)  {
@@ -181,6 +190,12 @@ public:
     inline bool isEmpty(int line) { return lineInfo[line].isEmpty(); }
     inline bool nest_less_blkIndent(int line){ return lineInfo[line].sCount < blkIndent; }
 
+    inline
+    auto charCodeAt(int pos){ assert(pos < src.length()); return uCodeChar(src[pos]);}
+
+    
+    inline bool isOutdented(int line) { return lineInfo[line].sCount < blkIndent;}
+
 public:
 
     //using Array  = std::vector<int> ;
@@ -196,7 +211,7 @@ public:
     bool tight{false};
     int ddIndent{-1};
     int listIndent{-1};
-    std::string parentType{ "root"};
+    std::string_view parentType{ parentType_root };
     int level{0};
     std::string result;
 
