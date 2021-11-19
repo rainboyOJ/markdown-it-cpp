@@ -9,6 +9,8 @@
 #include "./rules_core/state_core.hpp"
 #include "./render.hpp"
 
+#include "./rules_core/normarlize.hpp"
+
 
 namespace markdownItCpp {
 
@@ -58,7 +60,9 @@ public:
   }
 
   std::string render(std::string_view v_src,ENV env){
-      src = std::string(v_src);
+      //nor
+      //src = std::string(v_src);
+      normalize(v_src, src);
       parse(src, env);
       return m_render.render(tokens, options, env);
   }
