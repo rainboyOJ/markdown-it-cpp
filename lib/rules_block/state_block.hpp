@@ -99,15 +99,25 @@ public:
         tokens.push_back(t);
     }
 
-    class Token push(std::string_view type,std::string_view tag,int nesting)  {
+    class Token& push(std::string_view type,std::string_view tag,int nesting)  {
         class Token token(type, tag, nesting);
         token.block = true;
         if( nesting < 0) level--; // closing
         token.level = level;
         if( nesting > 0) level++; // opening
         tokens.push_back(token);
-        return token;
+        return tokens.back();
     }
+
+    class Token& tokens_back(){
+        return tokens.back();
+    }
+
+    //template<int start,int end = 0>
+    //void push_with_map(std::string_view type,std::string_view tag,int nesting){
+        //push(type,tag,nesting);
+        //tokens_back().map = {start,end};
+    //}
 
     int skipEmptyLines(int from) {
         for( ; from < lineMax ; from++)
@@ -147,29 +157,26 @@ public:
                 return pos+1;
         return pos;
     }
-    std::string getLines(int begin,int end,int indent,bool keepLastLF)  {
+    std::string getLines(int begin,int end,const int indent,const bool keepLastLF)  {
         if( begin >= end) return "";
         std::stringstream ss;
-        int  lineIndent, ch, first, last, lineStart,
-             line = begin;
-        for(int i=0; line < end;++i,++line){
+        int lineIndent, ch, first, last, lineStart;
+        for(; begin < end;++begin){ //一行一行遍历
             lineIndent = 0;
-            lineStart = first = lineInfo[line].bMarks;
+            first = lineInfo[begin].bMarks; //起点位置
             //如何确定last的位置?
-            if( line +1 < end || keepLastLF )
-                last = lineInfo[line].eMarks +1;
+            if( begin +1 < end || keepLastLF )
+                last = lineInfo[begin].eMarks +1;
             else
-                last = lineInfo[line].eMarks;
+                last = lineInfo[begin].eMarks; //一行的终点位置
             //计算这一行的indent
             while ( first < last && lineIndent < indent  ) {
                 auto ch = static_cast<int>(src[first]);
                 if( isSpace(ch)){
-                    if( ch == '\t')
-                        lineIndent += 4 - (lineIndent + lineInfo[line].bsCount) % 4;
-                    else
-                        lineIndent++;
+                    if( ch == '\t') lineIndent += 4 - (lineIndent + lineInfo[begin].bsCount) % 4;
+                    else            lineIndent++;
                 }
-                else if( first - lineStart < lineInfo[line].tShift)
+                else if( first - lineInfo[begin].bMarks < lineInfo[begin].tShift) //没有超过真正的空格
                     lineIndent++;
                 else break;
                 first++;
@@ -183,6 +190,13 @@ public:
         }
         return ss.str();
     }
+
+    //去除头部空格,与末尾的\n
+    std::string_view getOneLineView_nospc(int line){
+        auto pos  = lineInfo[line].first_nospace_pos();
+        auto last = lineInfo[line].eMarks;
+        return std::string_view(&src[pos],last-pos);
+    }
     //void Token() ;
     template<int MAX_space = 4>
     inline bool isCodeBlock(int line){ return lineInfo[line].sCount - blkIndent >= MAX_space; }
@@ -190,11 +204,14 @@ public:
     inline bool isEmpty(int line) { return lineInfo[line].isEmpty(); }
     inline bool nest_less_blkIndent(int line){ return lineInfo[line].sCount < blkIndent; }
 
+    inline bool should_code_block(int line) { return lineInfo[line].sCount - blkIndent >=4; }
+
     inline
     auto charCodeAt(int pos){ assert(pos < src.length()); return uCodeChar(src[pos]);}
 
     
     inline bool isOutdented(int line) { return lineInfo[line].sCount < blkIndent;}
+
 
 public:
 

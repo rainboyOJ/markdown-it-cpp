@@ -47,6 +47,7 @@ bool paragraph(
         }
         if(terminate) break;
     }
+    //得到中间这些行的内容
     std::string content = state.getLines(startLine, nextLine, state.blkIndent, false);
     //trim
     while ( content.length() && isSpace(content.front()) ) content.erase(content.begin());

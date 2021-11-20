@@ -16,6 +16,7 @@
 #include "./rules_block/state_block.hpp"
 #include "./rules_block/paragraph.hpp"
 #include "./rules_block/blockquote.hpp"
+#include "./rules_block/table.hpp"
 
 namespace markdownItCpp {
     
@@ -24,6 +25,7 @@ class ParserBlock {
 public:
     ParserBlock()
     {
+        ruler.push("table", table, {"paragraph", "reference"});
         ruler.push("blockquote", blockquote, {"paragraph", "reference", "blockquote", "list"});
         ruler.push("paragraph", paragraph);
     }

@@ -51,6 +51,12 @@ bool NoneOneOf(T&& t,Args&&... args){
         return ! AnyOf(std::forward<T>(t),std::forward<Args>(args)...);
 }
 
+std::string_view trim(std::string_view str){
+    while ( str.length() and isSpace(str.front()))  str.remove_prefix(1);
+    while ( str.length() and isSpace(str.back()))  str.remove_suffix(1);
+    return str;
+}
+
 inline uint32_t uCodeChar(char c){
     return static_cast<uint32_t>(c) & 0xff;
 }
