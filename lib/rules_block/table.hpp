@@ -158,7 +158,7 @@ bool table(
             state.tokens_back().attrPush("style", std::string("text-align:") + algin2string(algins[j]));
         }
         state.push(inline_type,emptyLine,0);
-        state.tokens_back().content = std::string(trim(columns[i]));
+        state.tokens_back().content = state.md.push_content_cache(std::string( trim(columns[i]) ));
         state.tokens_back().children.clear();
 
         state.push(th_close_type,th_type,-1);
@@ -208,7 +208,7 @@ bool table(
                 state.tokens_back().attrPush("style", std::string("text-align:") + algin2string(algins[j]));
             }
             state.push(inline_type,emptyLine,0);
-            state.tokens_back().content = std::string(trim(columns[i]));
+            state.tokens_back().content = state.md.push_content_cache(std::string( trim(columns[i]) ));
             state.tokens_back().children.clear();
 
             state.push(td_close_type,td_type,-1);

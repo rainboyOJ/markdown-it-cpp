@@ -85,13 +85,6 @@ public:
         if( src.length() == 0) return;
         StateBlock state(src,md,env,outTokens);
         tokenize(state, state.line, state.lineMax);
-        #ifdef DEBUG
-        dbg_one(state.tokens.size());
-        for (const auto& e : state.tokens) {
-            std::cout << e ;
-        }
-        std::cout << "===========" << std::endl;
-        #endif
     }
 
 public:

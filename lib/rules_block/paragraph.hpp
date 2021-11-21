@@ -58,7 +58,7 @@ bool paragraph(
     state.tokens.back().map  = {startLine,state.line};
 
     state.push("inline","",0);
-    state.tokens.back().content = std::move(content);
+    state.tokens.back().content = state.md.push_content_cache(std::move(content));
     state.tokens.back().map = {startLine,state.line};
     state.tokens.back().children.clear();
 

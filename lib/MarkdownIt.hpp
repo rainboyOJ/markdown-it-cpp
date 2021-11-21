@@ -11,6 +11,8 @@
 
 #include "./rules_core/normarlize.hpp"
 
+#include <memory>
+
 
 namespace markdownItCpp {
 
@@ -34,12 +36,31 @@ public:
   void parse(std::string& src,ENV env){
       StateCore state(src,*this,env,tokens);
       core.process(state);
+      //std::cout << "parseend ======================" << std::endl;
+      //for (const auto& e : tokens) {
+          //if( e.content.length() ){
+              //std::cout << std::hex << reinterpret_cast<uint64_t>(e.content.data()) << std::endl;
+              //std::cout  << std::endl;
+          //}
+      //}
+      //std::cout << "==" << std::endl;
+      //for (const auto& e : content_cache) {
+          //std::cout << std::hex << reinterpret_cast<uint64_t>(e->data()) << std::endl;
+          //std::cout << e->c_str() << std::endl;
+      //}
+      
+      //输出最终的token
       #ifdef DEBUG
         dbg_one(state.tokens.size());
         for (const auto& e : tokens) {
             std::cout << e ;
         }
       #endif
+  }
+
+  virtual std::string_view push_content_cache(std::string&& str) override{
+      content_cache.emplace_back(std::make_shared<std::string>(std::move(str)));
+      return *content_cache.back();
   }
 
   virtual const std::vector<BlockFn>& getBlockRules(std::string name) override{
@@ -74,6 +95,9 @@ public:
   optionsType options;
   TokenArray tokens;
   Render m_render;
+
+  std::vector<std::shared_ptr<std::string>> content_cache;
+
 };
 
 } // end namespace markdownItCpp

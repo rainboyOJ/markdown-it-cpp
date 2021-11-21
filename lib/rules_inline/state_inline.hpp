@@ -20,7 +20,8 @@ public:
 
     void pushPending(){
         Token t("text","",0);
-        t.content = std::move(pending);
+        //t.content = std::move(pending);
+        t.content  = md.push_content_cache(std::move(pending));
         t.level = pendingLevel;
         tokens.push_back(std::move(t));
         pending.clear();

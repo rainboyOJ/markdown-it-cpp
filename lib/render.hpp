@@ -96,6 +96,9 @@ public:
         return result;
     }
 
+    /**
+     * 渲染 inline Token
+     */
     std::string renderInline(TokenArrayRef& toks,optionsType& opt,ENV& env){
         std::string result{};
         for(int i=0;i<toks.size();++i){

@@ -91,7 +91,7 @@ public:
     int nesting;
     int level{0};
     std::vector<Token> children;
-    std::string content;
+    std::string_view content; 
     std::string_view markup;
     std::string info;
     std::any meta;

@@ -78,7 +78,7 @@ public:
 
     void parse(std::string_view src,MarkdownIt_base& md,ENV env,
             TokenArrayRef outTokens) {
-        StateInline state(src,md,env,outTokens);
+        StateInline state(src,md,env,outTokens); // 创建一个state
         tokenize(state);
         auto rules = ruler2.getRules("");
         auto len = rules.size();
