@@ -18,6 +18,7 @@
 #include "./rules_block/blockquote.hpp"
 #include "./rules_block/table.hpp"
 #include "./rules_block/code.hpp"
+#include "./rules_block/fence.hpp"
 
 namespace markdownItCpp {
     
@@ -28,6 +29,7 @@ public:
     {
         ruler.push("table", table, {"paragraph", "reference"});
         ruler.push("code", code);
+        ruler.push("fence", fence,{"paragraph","reference","blockquote","list"});
         ruler.push("blockquote", blockquote, {"paragraph", "reference", "blockquote", "list"});
         ruler.push("paragraph", paragraph);
     }

@@ -139,6 +139,13 @@ public:
     }
 
 
+    /**
+     * 起始,长度
+     */
+    std::string_view slice(size_t start,size_t end){
+        return std::string_view(&src[start],end-start);
+    }
+
     template<char ch>
     inline bool isChar(int pos){
         return src[pos] == ch; }
@@ -191,6 +198,10 @@ public:
             for(int j=first;j<last;++j)        ss << src[j];
         }
         return ss.str();
+    }
+
+    std::string_view getLines_view(size_t begin,size_t end){
+        return slice(lineInfo[begin].bMarks, lineInfo[end-1].eMarks);
     }
 
     //去除头部空格,与末尾的\n

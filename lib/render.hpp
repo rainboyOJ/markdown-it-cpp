@@ -19,6 +19,7 @@
 
 namespace markdownItCpp {
 
+namespace DEFAULT_RENDER_RULE {
 
 template<typename Render>
 std::string render_text(TokenArrayRef toks,int idx,optionsType&,ENV&,const Render *){
@@ -44,15 +45,38 @@ std::string code_block(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Re
           "</code></pre>\n";
 }
 
+template<typename Render>
+std::string fence(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render * self){
+    auto &tok = toks[idx];
+    if( tok.info.length()  > 0){ //if language exists
+        auto i = tok.attrIndex("class");
+        if(  i == -1){ // not found
+            tok.attrPush("class", opt.langPrefix + tok.info);
+        }
+        else{
+            tok.attrs[i].second += " ";
+            tok.attrs[i].second += opt.langPrefix;
+            tok.attrs[i].second += tok.info;
+        }
+    }
+
+    return  std::string("<pre><code") + self->renderAttrs(tok) + ">"
+        + escapeHtml(tok.content)
+        + "</code></pre>\n";
+}
+
+} // end of DEFAULT_RENDER_RULE
+
 
 class Render {
 public:
     Render(){
         //rules["text"] = render_text;
-        rules.emplace("text",render_text<Render>);
-        rules.emplace("hardbreak",hardbreak<Render>);
-        rules.emplace("softbreak",softbreak<Render>);
-        rules.emplace("code_block",code_block<Render>);
+        rules.emplace("text",       DEFAULT_RENDER_RULE::render_text<Render>);
+        rules.emplace("hardbreak",  DEFAULT_RENDER_RULE::hardbreak<Render>);
+        rules.emplace("softbreak",  DEFAULT_RENDER_RULE::softbreak<Render>);
+        rules.emplace("code_block", DEFAULT_RENDER_RULE::code_block<Render>);
+        rules.emplace("fence",       DEFAULT_RENDER_RULE::fence<Render>);
 
     }
 

@@ -11,6 +11,7 @@ namespace markdownItCpp {
     constexpr auto parentType_root = "root"sv;
     constexpr auto codeblock_type  = "code_block"sv;
     constexpr auto code_type       = "code"sv;
+    constexpr auto fenc_type       = "fence"sv;
 
     //paragraph
     constexpr auto paragraph_open_type = "paragraph_open"sv;
@@ -49,4 +50,6 @@ namespace markdownItCpp {
     constexpr uint32_t GREATER_CHAR = 0x3E; // >
     constexpr uint32_t SPACE_CHAR   = 0x20; // ' '
     constexpr uint32_t TAB_CHAR     = 0x09; // '\t'
+    constexpr uint32_t TILDE_CHAR   = 0x7e; // '~'
+    constexpr uint32_t GRAVE_CHAR   = 0x60; // '`'
 }
