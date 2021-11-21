@@ -12,12 +12,6 @@
 
 namespace markdownItCpp {
 
-constexpr uint32_t pip_char = '|';
-constexpr uint32_t backslash_char = '\\';
-constexpr uint32_t minus_char = '-';
-constexpr uint32_t colon_char = ':';
-
-
 enum class ALGIN {
     left,
     center,
