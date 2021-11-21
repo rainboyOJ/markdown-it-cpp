@@ -17,6 +17,12 @@ namespace markdownItCpp {
  */
 struct ENV { };
 
+enum NESTING {
+    close = -1,
+    open = 1,
+    self_close = 0
+};
+
 struct delimiters_type {
     bool close{false};
     int end{-1};
@@ -42,7 +48,8 @@ using InlineFn = std::function<bool(StateInline&,bool)>;
 using TokenArray = std::vector<Token>;
 using TokenArrayRef = std::vector<Token> &;
 
-using default_render_ruleFn = std::function<std::string(TokenArrayRef,int,optionsType&,ENV&)>;
+template<typename Render>
+using default_render_ruleFn = std::function<std::string(TokenArrayRef,int,optionsType&,ENV&,const Render *)>;
 
 //虚基类
 class MarkdownIt_base {

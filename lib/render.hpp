@@ -17,21 +17,31 @@
 
 //using std::literals::string_view_literals::operator""sv;
 
-
-
 namespace markdownItCpp {
 
-std::string render_text(TokenArrayRef toks,int idx,optionsType&,ENV&){
+
+template<typename Render>
+std::string render_text(TokenArrayRef toks,int idx,optionsType&,ENV&,const Render *){
     return escapeHtml(toks[idx].content);
 }
 
-std::string hardbreak(TokenArrayRef toks,int idx,optionsType& opt,ENV&){
+template<typename Render>
+std::string hardbreak(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render *){
     return opt.xhtmlOut ? "<br />\n" : "<br>\n";
 }
-std::string softbreak(TokenArrayRef toks,int idx,optionsType& opt,ENV&){
+template<typename Render>
+std::string softbreak(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render *){
     return opt.breaks 
         ?  (opt.xhtmlOut ? "<br />\n" : "<br>\n" )
         : "\n";
+}
+
+template<typename Render>
+std::string code_block(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render * self){
+    auto &tok = toks[idx];
+    return std::string("<pre") + self->renderAttrs(tok) + "><code>" +
+          escapeHtml(tok.content) +
+          "</code></pre>\n";
 }
 
 
@@ -39,14 +49,15 @@ class Render {
 public:
     Render(){
         //rules["text"] = render_text;
-        rules.emplace("text",render_text);
-        rules.emplace("hardbreak",hardbreak);
-        rules.emplace("softbreak",softbreak);
+        rules.emplace("text",render_text<Render>);
+        rules.emplace("hardbreak",hardbreak<Render>);
+        rules.emplace("softbreak",softbreak<Render>);
+        rules.emplace("code_block",code_block<Render>);
 
     }
 
     // 渲染tokens里的attrs属性
-    std::string renderAttrs(Token & tok){
+    std::string renderAttrs(Token & tok) const{
         if( tok.attrs.size() == 0) return "";
         std::string result{};
         for (const auto& [name,attr] : tok.attrs) {
@@ -59,7 +70,7 @@ public:
     }
 
     //renderToken 的作用就是渲染开标签或者闭合标签，内部还会调用 renderAttrs 来生成 attributes。
-    std::string renderToken(TokenArrayRef& toks,int idx,optionsType& opt){
+    std::string renderToken(TokenArrayRef& toks,int idx,optionsType& opt) const{
         auto & tok = toks[idx];
         if( tok.hidden ) return "";
         std::string result{};
@@ -104,7 +115,7 @@ public:
         for(int i=0;i<toks.size();++i){
             auto type = toks[i].type_str();
             if( rules.count(type) != 0 )
-                result += rules[type](toks,i,opt,env);
+                result += rules[type](toks,i,opt,env,this);
             else
                 result += renderToken(toks, i, opt);
         }
@@ -123,18 +134,18 @@ public:
             if( type == "inline")
                 result += renderInline(toks[i].children,opt,env);
             else if( rules.count(type) != 0)
-                result += rules[type](toks,i,opt,env);
+                result += rules[type](toks,i,opt,env,this);
             else 
                 result += renderToken(toks,i,opt);
         }
         return result;
     }
     //
-    default_render_ruleFn& getRules(std::string_view name){
+    default_render_ruleFn<Render>& getRules(std::string_view name){
         return rules[std::string(name)];
     }
     
-    std::unordered_map<std::string, default_render_ruleFn> rules;
+    std::unordered_map<std::string, default_render_ruleFn<Render>> rules;
     
 };
 

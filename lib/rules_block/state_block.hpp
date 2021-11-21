@@ -11,7 +11,6 @@
 namespace markdownItCpp {
 
 //BlockState parentType
-constexpr auto parentType_root = "root"sv;
 
 struct LineInfo {
     int bMarks;   //每一行开始 在原src的位置
@@ -157,6 +156,9 @@ public:
                 return pos+1;
         return pos;
     }
+    /**
+     * indent 前面indent的都舍弃
+     */
     std::string getLines(int begin,int end,const int indent,const bool keepLastLF)  {
         if( begin >= end) return "";
         std::stringstream ss;

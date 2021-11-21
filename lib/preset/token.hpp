@@ -4,13 +4,20 @@
 using std::literals::string_view_literals::operator""sv;
 
 namespace markdownItCpp {
+
+    // common
+    constexpr auto inline_type     = "inline"sv;
+    constexpr auto emptyLine       = ""sv;
+    constexpr auto parentType_root = "root"sv;
+    constexpr auto codeblock_type  = "code_block"sv;
+    constexpr auto code_type       = "code"sv;
+
     //paragraph
     constexpr auto paragraph_open_type = "paragraph_open"sv;
     constexpr auto paragraph_close_type = "paragraph_close"sv;
     constexpr auto paragraph_tag= "p"sv;
 
-    constexpr auto emptyLine = ""sv;
-
+    //table
     constexpr auto table_open_type  = "table_open"sv;
     constexpr auto table_close_type = "table_close"sv;
     constexpr auto table_type       = "table"sv;
@@ -35,8 +42,7 @@ namespace markdownItCpp {
     constexpr auto td_close_type = "td_close"sv;
     constexpr auto td_type       = "td"sv;
 
-    constexpr auto inline_type  = "inline"sv;
-
+    //inline
 
 
     // char
