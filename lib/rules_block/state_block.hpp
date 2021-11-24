@@ -35,6 +35,9 @@ struct LineInfo {
 
     inline bool isEmpty() { return bMarks + tShift >= eMarks; }
 
+    std::pair<int, int> getBeginEnd() { return {first_nospace_pos(),eMarks}; }
+
+
 
 };
 
@@ -140,7 +143,8 @@ public:
 
 
     /**
-     * 起始,长度
+     * 起始,结束位置
+     * [start,end)
      */
     std::string_view slice(size_t start,size_t end){
         return std::string_view(&src[start],end-start);
@@ -214,7 +218,11 @@ public:
     template<int MAX_space = 4>
     inline bool isCodeBlock(int line){ return lineInfo[line].sCount - blkIndent >= MAX_space; }
 
-    inline bool isEmpty(int line) { return lineInfo[line].isEmpty(); }
+    inline bool isEmpty(int line) { 
+        if( line >=lineMax ) return true;
+        return lineInfo[line].isEmpty(); 
+    }
+
     inline bool nest_less_blkIndent(int line){ return lineInfo[line].sCount < blkIndent; }
 
     inline bool should_code_block(int line) { return lineInfo[line].sCount - blkIndent >=4; }
@@ -235,12 +243,12 @@ public:
     //Array sCount;   //第一个非空白字符 offset tabs expand
     //Array bsCount;  //都是0
     std::vector<LineInfo> lineInfo;
-    int blkIndent{0};
+    int blkIndent{0}; //需要的 block content 缩进
     int line{0};
     int lineMax{0};
     bool tight{false};
     int ddIndent{-1};
-    int listIndent{-1};
+    int listIndent{-1}; //当前list block 的缩进
     std::string_view parentType{ parentType_root };
     int level{0};
     std::string result;

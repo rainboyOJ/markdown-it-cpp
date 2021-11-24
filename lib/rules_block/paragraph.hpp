@@ -24,7 +24,7 @@ bool paragraph(
     
     bool terminate;
     auto oldParentType = state.parentType;
-    state.parentType = "paragraph"; //改变 parentType
+    state.parentType = parentType_paragraph; //改变 parentType
 
     // jump line-by-line until empty one or EOF
     for( ; nextLine < endLine && ! state.lineInfo[nextLine].isEmpty() ; nextLine++){

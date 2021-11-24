@@ -11,13 +11,6 @@
 
 namespace markdownItCpp {
 
-//BlockState parentType
-constexpr auto parentType_blockquote = "blockquote"sv;
-//markup
-constexpr auto blockquote_markup = ">"sv;
-constexpr auto blockquote_open   = "blockquote_open"sv;
-constexpr auto blockquote_close  = "blockquote_close"sv;
-constexpr auto blockquote_tag  = "blockquote"sv;
 
 bool blockquote(
         StateBlock& state,
@@ -153,12 +146,6 @@ bool blockquote(
     Token t2(blockquote_close,blockquote_tag,1);
     t2.markup = blockquote_markup;
     state.push(t);
-
-
-
-
-
-
 
     return true;
 }
