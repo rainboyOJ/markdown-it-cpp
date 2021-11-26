@@ -5,13 +5,11 @@
 #include <sstream>
 
 #include "../common/utils.hpp"
+#include "../preset/token.hpp"
 
 
 namespace markdownItCpp {
 
-constexpr uint32_t newliner_char = '\r';
-constexpr uint32_t newlinen_char = '\n';
-constexpr uint32_t NULL_char= '\0';
 
 void normalize(std::string_view src,std::string& out){
     out.clear(); //清空

@@ -7,6 +7,7 @@ namespace markdownItCpp {
     //parentType
     constexpr auto parentType_root       = "root"sv;
     constexpr auto parentType_paragraph  = "paragraph"sv;
+    constexpr auto reference_paragraph  = "reference"sv;
     constexpr auto parentType_blockquote = "blockquote"sv;
     constexpr auto parentType_list = "list"sv;
 
@@ -71,15 +72,27 @@ namespace markdownItCpp {
 
 
     // char
-    constexpr uint32_t GREATER_CHAR    = 0x3E; // >
-    constexpr uint32_t SPACE_CHAR      = 0x20; // ' '
-    constexpr uint32_t TAB_CHAR        = 0x09; // '\t'
-    constexpr uint32_t TILDE_CHAR      = 0x7e; // '~'
-    constexpr uint32_t GRAVE_CHAR      = 0x60; // '`'
-    constexpr uint32_t pip_char        = '|';
-    constexpr uint32_t backslash_char  = '\\';
-    constexpr uint32_t minus_char      = '-';
-    constexpr uint32_t colon_char      = ':';
-    constexpr uint32_t STAR_CHAR       = 0x2A; // '*'
-    constexpr uint32_t UNDERSCORE_CHAR = 0x5F; // '_'
+    constexpr uint32_t LESS_CHAR          = 0x3C; // '< '
+    constexpr uint32_t GREATER_CHAR       = 0x3E; // >
+    constexpr uint32_t SPACE_CHAR         = 0x20; // ' '
+    constexpr uint32_t TAB_CHAR           = 0x09; // '\t'
+    constexpr uint32_t TILDE_CHAR         = 0x7e; // '~'
+    constexpr uint32_t GRAVE_CHAR         = 0x60; // '`'
+    constexpr uint32_t pip_char           = '|';
+    constexpr uint32_t backslash_char     = '\\';
+    constexpr uint32_t minus_char         = '-';
+    constexpr uint32_t colon_char         = ':';
+    constexpr uint32_t STAR_CHAR          = 0x2A; // '*'
+    constexpr uint32_t UNDERSCORE_CHAR    = 0x5F; // '_'
+    constexpr uint32_t QUOTE_CHAR         = 0x22; // ' " '
+    constexpr uint32_t SINGLE_QUOTE_CHAR  = 0x27; // ' ' '
+    constexpr uint32_t OPEN_CHAR          = 0x28; // ' ( '
+    constexpr uint32_t CLOSE_CHAR         = 0x29; // ' ) '
+    constexpr uint32_t OPEN_BRACKET_CHAR  = 0x5b; // ' [ '
+    constexpr uint32_t BACKSLASH_CHAR     = 0x5C; // ' \ '
+    constexpr uint32_t CLOSE_BRACKET_CHAR = 0x5d; // ' ] '
+    constexpr uint32_t newliner_char = '\r';
+    constexpr uint32_t newlinen_char = '\n';
+    constexpr uint32_t NULL_char= '\0';
+
 }

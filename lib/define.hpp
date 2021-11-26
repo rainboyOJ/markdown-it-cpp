@@ -51,6 +51,11 @@ using TokenArrayRef = std::vector<Token> &;
 template<typename Render>
 using default_render_ruleFn = std::function<std::string(TokenArrayRef,int,optionsType&,ENV&,const Render *)>;
 
+struct References {
+    std::string title;
+    std::string href;
+};
+
 //虚基类
 class MarkdownIt_base {
 public:
@@ -60,6 +65,8 @@ public:
     virtual void blockTokenize(StateBlock&,int,int) = 0;
     virtual void inlineParse(std::string_view src,MarkdownIt_base&,ENV,TokenArrayRef) = 0;
     virtual std::string_view push_content_cache(std::string&& str) = 0;
+
+    std::unordered_map<std::string,References> references;
 };
 
 } // end namespace markdownItCpp
