@@ -22,6 +22,7 @@
 #include "./rules_block/hr.hpp"
 #include "./rules_block/list.hpp"
 #include "./rules_block/reference.hpp"
+#include "./rules_block/heading.hpp"
 
 namespace markdownItCpp {
     
@@ -37,8 +38,7 @@ public:
         ruler.push("hr", hr, {"paragraph", "reference", "blockquote", "list"});
         ruler.push("list", list, {"paragraph", "reference", "blockquote"});
         ruler.push("reference", reference);
-        //[ 'html_block', require('./rules_block/html_block'), [ 'paragraph', 'reference', 'blockquote' ] ],
-        //[ 'heading',    require('./rules_block/heading'),    [ 'paragraph', 'reference', 'blockquote' ] ],
+        ruler.push("heading", heading,{"paragraph", "reference", "blockquote"});
         ruler.push("paragraph", paragraph);
     }
 

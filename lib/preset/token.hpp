@@ -11,6 +11,22 @@ namespace markdownItCpp {
     constexpr auto parentType_blockquote = "blockquote"sv;
     constexpr auto parentType_list = "list"sv;
 
+    //head
+    constexpr auto heading_open_type  = "heading_open"sv;
+    constexpr auto heading_close_type = "heading_close"sv;
+
+    auto heading_type (int level){
+        switch(level){
+            case 1: return "h1"sv;
+            case 2: return "h2"sv;
+            case 3: return "h3"sv;
+            case 4: return "h4"sv;
+            case 5: return "h5"sv;
+            case 6: return "h6"sv;
+            default: return "h1"sv;
+        }
+    }
+
     //markup
     constexpr auto blockquote_markup = ">"sv;
     constexpr auto blockquote_open   = "blockquote_open"sv;
@@ -82,6 +98,7 @@ namespace markdownItCpp {
     constexpr uint32_t backslash_char     = '\\';
     constexpr uint32_t minus_char         = '-';
     constexpr uint32_t colon_char         = ':';
+    constexpr uint32_t SHARP_CHAR         = 0x23; // ' # '
     constexpr uint32_t STAR_CHAR          = 0x2A; // '*'
     constexpr uint32_t UNDERSCORE_CHAR    = 0x5F; // '_'
     constexpr uint32_t QUOTE_CHAR         = 0x22; // ' " '
@@ -91,8 +108,8 @@ namespace markdownItCpp {
     constexpr uint32_t OPEN_BRACKET_CHAR  = 0x5b; // ' [ '
     constexpr uint32_t BACKSLASH_CHAR     = 0x5C; // ' \ '
     constexpr uint32_t CLOSE_BRACKET_CHAR = 0x5d; // ' ] '
-    constexpr uint32_t newliner_char = '\r';
-    constexpr uint32_t newlinen_char = '\n';
-    constexpr uint32_t NULL_char= '\0';
+    constexpr uint32_t newliner_char      = '\r';
+    constexpr uint32_t newlinen_char      = '\n';
+    constexpr uint32_t NULL_char          = '\0';
 
 }

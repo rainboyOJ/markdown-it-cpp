@@ -160,6 +160,7 @@ public:
         }
         return pos;
     }
+    // [_min,pos)
     int skipCharsBack(int pos,char code,int _min) {
         if( pos <=_min) return pos;
         while(pos > _min )
