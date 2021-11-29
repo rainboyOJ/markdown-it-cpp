@@ -7,9 +7,11 @@ namespace markdownItCpp {
     //parentType
     constexpr auto parentType_root       = "root"sv;
     constexpr auto parentType_paragraph  = "paragraph"sv;
-    constexpr auto reference_paragraph  = "reference"sv;
+    constexpr auto reference_paragraph   = "reference"sv;
     constexpr auto parentType_blockquote = "blockquote"sv;
-    constexpr auto parentType_list = "list"sv;
+    constexpr auto parentType_list       = "list"sv;
+
+    constexpr auto text_type = "text"sv;
 
     //head
     constexpr auto heading_open_type  = "heading_open"sv;
@@ -39,6 +41,7 @@ namespace markdownItCpp {
     constexpr auto emptyLine       = ""sv;
     constexpr auto codeblock_type  = "code_block"sv;
     constexpr auto code_type       = "code"sv;
+    constexpr auto code_inline_type = "code_inline"sv;
     constexpr auto fenc_type       = "fence"sv;
     constexpr auto hr_type       = "hr"sv;
 
@@ -85,7 +88,19 @@ namespace markdownItCpp {
     constexpr auto li_type                 = "li"sv;
 
     //inline
+    constexpr auto hardbreak_type = "hardbreak"sv;
+    constexpr auto softbreak_type = "softbreak"sv;
+    constexpr auto break_tag      = "br"sv;
 
+    
+    //~~ s_open
+    constexpr auto s_open_type  = "s_open"sv;
+    constexpr auto s_close_type = "s_close"sv;
+    constexpr auto s_tag        = "s"sv;
+
+    //char literals
+    constexpr auto tilde_char        = "~"sv; // '~'
+    constexpr auto double_tilde_char = "~~"sv; // '~'
 
     // char
     constexpr uint32_t LESS_CHAR          = 0x3C; // '< '

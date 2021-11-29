@@ -23,16 +23,6 @@ enum NESTING {
     self_close = 0
 };
 
-struct delimiters_type {
-    bool close{false};
-    int end{-1};
-    int jump{0};
-    int length{2};
-    int level{0};
-    int marker{42};
-    bool open{true};
-    int token{0};
-};
 
 class StateBlock;
 using BlockFn = std::function<bool(StateBlock&,int,int,bool)>;
@@ -40,9 +30,20 @@ using BlockFn = std::function<bool(StateBlock&,int,int,bool)>;
 class StateCore;
 using CoreFn = std::function<void(StateCore&)>;
 
+struct delimiters_type {
+    int  end{-1};   //对应的结束的下标
+    int  jump{0};   //初始应该回跳多少
+    int  length{0}; //长度
+    char marker{0}; //对应的marker
+    int  level{0};
+    bool open{true};
+    bool close{true};
+    size_t  token{0}; //对应的token的下标
+};
 
 class StateInline;
-using InlineFn = std::function<bool(StateInline&,bool)>;
+using InlineFn  = std::function<bool(StateInline&,bool)>;
+using InlineFn2 = std::function<void(StateInline&,std::vector<delimiters_type>&)>;
 
 
 using TokenArray = std::vector<Token>;

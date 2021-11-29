@@ -17,6 +17,7 @@
 
 #include "./rules_inline/text.hpp"
 #include "./rules_inline/newline.hpp"
+#include "./rules_inline/rule.hpp"
 
 namespace markdownItCpp {
 
@@ -26,6 +27,20 @@ public:
     ParserInline(){
         ruler.push("text", text);
         ruler.push("newline",newline);
+        ruler.push("strikethroughTokenize",strikethroughTokenize);
+        //escape
+        //backticks
+        //strikethrough
+        //emphasis
+        //link
+        //image
+        //autolink
+        //html_inline
+        //entity
+
+        //ruler2
+        ruler2.push("blance_pairs", blance_pairs);
+        ruler2.push("strikethroughPostcess", strikethroughPostcess);
     }
 
     void skipToken(StateInline& state){
@@ -83,13 +98,13 @@ public:
         auto rules = ruler2.getRules("");
         auto len = rules.size();
         for(int i=0;i< len;++i){
-            rules[i](state,false);
+            rules[i](state,state.delimiters);
         }
     }
 
 public:
     Ruler<InlineFn> ruler;
-    Ruler<InlineFn> ruler2;
+    Ruler<InlineFn2> ruler2;
 };
 
 };

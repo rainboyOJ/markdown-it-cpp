@@ -11,6 +11,7 @@ namespace markdownItCpp {
 
 class StateInline {
 public:
+
     StateInline(std::string_view src,MarkdownIt_base& md,ENV env,
             TokenArrayRef tokens
             )
@@ -18,15 +19,19 @@ public:
         posMax{src.length()}
     {}
 
+    std::string_view slice(size_t start,size_t end){
+        return std::string_view(&src[start],end-start);
+    }
+
     void pushPending(){
-        Token t("text","",0);
+        Token t(text_type,emptyLine,0);
         //t.content = std::move(pending);
         t.content  = md.push_content_cache(std::move(pending));
         t.level = pendingLevel;
         tokens.push_back(std::move(t));
         pending.clear();
     }
-    void push(std::string_view type,std::string_view tag,int nesting){
+    Token& push(std::string_view type,std::string_view tag,int nesting){
         if( pending.length() ) //先把pending 加入
             pushPending();
         Token t(type,tag,nesting);
@@ -44,12 +49,23 @@ public:
         pendingLevel = level;
         tokens.push_back(std::move(t));
         //tokens_meta
+        return tokens.back();
     }
 
-    void scanDelims(int start,bool canSplitWord){
+    int scanDelims(int start,bool canSplitWord){
+        auto ch = src[start];
+        auto pos = start;
+        while( pos < posMax && ch == src[pos] ) pos++;
+        return pos - start; //数量
     }
 
+    inline uint32_t charCodeAt(size_t pos){
+        return uCodeChar(src[pos]);
+    }
 
+    Token& tokens_back() {
+        return  tokens.back();
+    }
 
 
 
@@ -78,7 +94,7 @@ public:
   //this._prev_delimiters = [];
 
   // backtick length => last seen position
-  //this.backticks = {};
+  std::map<int,int>backticks{};
   bool backticksScanned = false;
 };
 

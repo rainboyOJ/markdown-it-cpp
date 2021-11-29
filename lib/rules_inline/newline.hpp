@@ -8,9 +8,6 @@
 
 namespace markdownItCpp {
 
-constexpr auto hardbreak_type  = "hardbreak"sv;
-constexpr auto softbreak_type = "softbreak"sv;
-constexpr auto break_tag = "br"sv;
 
 /**
  * 作用: 处理换行符
