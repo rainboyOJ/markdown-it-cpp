@@ -65,6 +65,15 @@ std::string fence(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render 
         + "</code></pre>\n";
 }
 
+
+template<typename Render>
+std::string code_inline(TokenArrayRef toks,int idx,optionsType& opt,ENV&,const Render * self){
+    auto &tok = toks[idx];
+    return std::string("<code") + self->renderAttrs(tok) + ">" +
+          escapeHtml(tok.content) +
+          "</code>";
+}
+
 } // end of DEFAULT_RENDER_RULE
 
 
@@ -76,7 +85,8 @@ public:
         rules.emplace("hardbreak",  DEFAULT_RENDER_RULE::hardbreak<Render>);
         rules.emplace("softbreak",  DEFAULT_RENDER_RULE::softbreak<Render>);
         rules.emplace("code_block", DEFAULT_RENDER_RULE::code_block<Render>);
-        rules.emplace("fence",       DEFAULT_RENDER_RULE::fence<Render>);
+        rules.emplace("fence",      DEFAULT_RENDER_RULE::fence<Render>);
+        rules.emplace("code_inline",DEFAULT_RENDER_RULE::code_inline<Render>);
 
     }
 

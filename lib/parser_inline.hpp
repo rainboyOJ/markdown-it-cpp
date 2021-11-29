@@ -17,6 +17,7 @@
 
 #include "./rules_inline/text.hpp"
 #include "./rules_inline/newline.hpp"
+#include "./rules_inline/escape.hpp"
 #include "./rules_inline/rule.hpp"
 
 namespace markdownItCpp {
@@ -27,6 +28,8 @@ public:
     ParserInline(){
         ruler.push("text", text);
         ruler.push("newline",newline);
+        ruler.push("escape",escape); //转义字符
+        ruler.push("backtick", backtick); //行内公式
         ruler.push("strikethroughTokenize",strikethroughTokenize);
         //escape
         //backticks
