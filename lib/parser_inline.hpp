@@ -31,6 +31,7 @@ public:
         ruler.push("escape",escape); //转义字符
         ruler.push("backtick", backtick); //行内公式
         ruler.push("strikethroughTokenize",strikethroughTokenize);
+        ruler.push("emphasisTokensize",emphasisTokensize);
         //escape
         //backticks
         //strikethrough
@@ -44,6 +45,7 @@ public:
         //ruler2
         ruler2.push("blance_pairs", blance_pairs);
         ruler2.push("strikethroughPostcess", strikethroughPostcess);
+        ruler2.push("emphasisPostcess",emphasisPostcess);
     }
 
     void skipToken(StateInline& state){

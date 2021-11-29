@@ -106,6 +106,40 @@ bool strikethroughTokenize(StateInline& state,bool silent) {
     return true;
 }
 
+
+/**
+ * emphasis **blod** *倾斜*
+ * 强调符号
+ */
+
+bool emphasisTokensize(StateInline& state,bool silent) {
+    if(silent) return true;
+    auto start = state.pos;
+    auto ch = state.src[start];
+    if(NoneOneOf(ch, '_','*')) return true;
+
+    int scanLen = state.scanDelims(state.pos,true);
+    for(int i=0;i<scanLen;++i){
+        auto &token = state.push(text_type, emptyLine, 0);
+        //token.content = underscore_char;
+        token.content = (ch == '_' ? underscore_char : star_char);
+
+        state.delimiters.push_back(delimiters_type{
+                .end= -1,   //对应的结束的下标
+                .jump= i,   //初始应该回跳多少
+                .length= scanLen, //长度
+                .marker= ch, //对应的marker
+                .level= 0,
+                .open= true,
+                .close= true,
+                .token = state.tokens.size() - 1 //对应的token的下标
+                });
+    }
+
+    state.pos += scanLen;
+    return true;
+}
+
 //rule2
 void strikethroughPostcess(StateInline& state,std::vector<delimiters_type> & delimiters){
 
@@ -164,5 +198,41 @@ void blance_pairs(StateInline& state,std::vector<delimiters_type> & delimiters){
     }
 }
 
+
+//rule2
+void emphasisPostcess(StateInline& state,std::vector<delimiters_type> & delimiters){
+    int size = delimiters.size();
+    for(int i=size-1;i >=0;--i){
+        auto &startDelim = delimiters[i];
+        if(NoneOneOf(startDelim.marker, '_','*')) continue;
+        if( startDelim.end == -1) continue; //没有对应
+        auto &endDelim = delimiters[startDelim.end];
+
+
+        // ** -> strong
+        bool isStrong = i > 0 &&
+            delimiters[i-1].end == startDelim.end+1 && //前一个对应 对应的后一个
+            delimiters[i-1].token == startDelim.token-1 && // 对应的token 相邻
+            delimiters[startDelim.end+1].token == endDelim.token+1 && // 对应的token 相邻
+            delimiters[i-1].marker == startDelim.marker ; // marker 一样
+        auto token     = &state.tokens[startDelim.token];
+        token->type    = isStrong ? strong_open_type : em_open_type;
+        token->tag     = isStrong ? strong_tag : em_tag;
+        token->nesting = 1;
+        token->markup  = isStrong ? double_star_char : star_char;
+
+        token     = &state.tokens[endDelim.token];
+        token->type    = isStrong ? strong_close_type : em_close_type;
+        token->tag     = isStrong ? strong_tag : em_tag;
+        token->nesting = -1;
+        token->markup  = isStrong ? double_star_char : star_char;
+
+        if( isStrong ){
+            state.tokens[delimiters[i-1].token].hidden  = true;
+            state.tokens[delimiters[startDelim.end+1].token].hidden  = true;
+            i--;
+        }
+    }
+}
 
 }

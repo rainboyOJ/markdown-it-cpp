@@ -23,6 +23,7 @@ namespace DEFAULT_RENDER_RULE {
 
 template<typename Render>
 std::string render_text(TokenArrayRef toks,int idx,optionsType&,ENV&,const Render *){
+    if( toks[idx].hidden ) return "";
     return escapeHtml(toks[idx].content);
 }
 

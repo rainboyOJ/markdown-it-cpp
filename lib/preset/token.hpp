@@ -94,13 +94,23 @@ namespace markdownItCpp {
 
     
     //~~ s_open
-    constexpr auto s_open_type  = "s_open"sv;
-    constexpr auto s_close_type = "s_close"sv;
-    constexpr auto s_tag        = "s"sv;
+    constexpr auto s_open_type       = "s_open"sv;
+    constexpr auto s_close_type      = "s_close"sv;
+    constexpr auto s_tag             = "s"sv;
+    constexpr auto strong_open_type  = "strong_open"sv;
+    constexpr auto strong_close_type = "strong_close"sv;
+    constexpr auto strong_tag        = "strong"sv;
+    constexpr auto em_open_type      = "em_close"sv;
+    constexpr auto em_close_type     = "em_close"sv;
+    constexpr auto em_tag            = "em"sv;
 
     //char literals
-    constexpr auto tilde_char        = "~"sv; // '~'
-    constexpr auto double_tilde_char = "~~"sv; // '~'
+    constexpr auto tilde_char             = "~"sv; // '~'
+    constexpr auto double_tilde_char      = "~~"sv; // '~'
+    constexpr auto star_char              = "*"sv; // '~'
+    constexpr auto double_star_char       = "**"sv; // '~'
+    constexpr auto underscore_char        = "_"sv; // '~'
+    constexpr auto double_underscore_char = "__"sv; // '~'
 
     // char
     constexpr uint32_t LESS_CHAR          = 0x3C; // '< '
