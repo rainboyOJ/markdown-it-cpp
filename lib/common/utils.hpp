@@ -11,6 +11,13 @@ bool isSpace(int code) {
     return false;
 }
 
+int skipSpace(std::string_view src,int start){
+    while ( start < src.length() && isSpace(src[start]) ) {
+        start++;
+    }
+    return start;
+}
+
 
 std::string escapeHtml(std::string_view str){
     std::string result{};
@@ -240,6 +247,14 @@ ParseResult parseLinkDestination(std::string_view str,int start,int end){
     res.pos = start;
     res.ok = true;
     return res;
+}
+
+int parseLinkLabel(std::string_view str,int start,int end,bool disableNested=true){
+    auto startBak = start;
+    while(str[start] != ']' && start < end) start++;
+    if( start == end )
+        return -1;
+    return start;
 }
 
 } // end namespace markdownItCpp

@@ -79,6 +79,9 @@ public:
   virtual void inlineParse(std::string_view src , MarkdownIt_base &md, ENV env, TokenArrayRef outTokens) override {
       m_inline.parse(src, md, env, outTokens);
   }
+  virtual void inlineTokenize(StateInline& state) override {
+      m_inline.tokenize(state);
+  }
 
   std::string render(std::string_view v_src,ENV env){
       //nor

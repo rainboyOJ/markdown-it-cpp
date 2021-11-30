@@ -91,6 +91,9 @@ namespace markdownItCpp {
     constexpr auto hardbreak_type = "hardbreak"sv;
     constexpr auto softbreak_type = "softbreak"sv;
     constexpr auto break_tag      = "br"sv;
+    constexpr auto link_open_type = "link_open"sv;
+    constexpr auto link_close_type = "link_close"sv;
+    constexpr auto a_tag= "a"sv;
 
     
     //~~ s_open

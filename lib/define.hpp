@@ -65,6 +65,7 @@ public:
     virtual void blockParse(std::string_view,MarkdownIt_base&,ENV,TokenArrayRef) = 0;
     virtual void blockTokenize(StateBlock&,int,int) = 0;
     virtual void inlineParse(std::string_view src,MarkdownIt_base&,ENV,TokenArrayRef) = 0;
+    virtual void inlineTokenize(StateInline&) = 0;
     virtual std::string_view push_content_cache(std::string&& str) = 0;
 
     std::unordered_map<std::string,References> references;

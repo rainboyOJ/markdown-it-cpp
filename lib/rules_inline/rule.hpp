@@ -116,7 +116,7 @@ bool emphasisTokensize(StateInline& state,bool silent) {
     if(silent) return true;
     auto start = state.pos;
     auto ch = state.src[start];
-    if(NoneOneOf(ch, '_','*')) return true;
+    if(NoneOneOf(ch, '_','*')) return false;
 
     int scanLen = state.scanDelims(state.pos,true);
     for(int i=0;i<scanLen;++i){
