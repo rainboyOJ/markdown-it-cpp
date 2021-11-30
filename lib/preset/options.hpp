@@ -7,7 +7,7 @@ struct optionsType {
   // - `false`. Set `true` to enable HTML tags in source. Be careful!
   //That's not safe! You may need external sanitizer to protect output from XSS.
   //It's better to extend features via plugins, instead of enabling HTML.
-  bool xhtmlOut;
+  bool xhtmlOut{true};
   //- `false`. Set `true` to add '/' when closing single tags
     //(`<br />`). This is needed only for full CommonMark compatibility. In real
     //world you will need HTML output.

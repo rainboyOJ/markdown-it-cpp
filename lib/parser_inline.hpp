@@ -19,6 +19,7 @@
 #include "./rules_inline/newline.hpp"
 #include "./rules_inline/escape.hpp"
 #include "./rules_inline/link.hpp"
+#include "./rules_inline/image.hpp"
 #include "./rules_inline/rule.hpp"
 
 namespace markdownItCpp {
@@ -33,7 +34,8 @@ public:
         ruler.push("backtick", backtick); //行内公式
         ruler.push("strikethroughTokenize",strikethroughTokenize);
         ruler.push("emphasisTokensize",emphasisTokensize);
-        ruler.push("link",link);
+        //ruler.push("link",link);
+        ruler.push("image",image);
         //escape
         //backticks
         //strikethrough

@@ -6,21 +6,24 @@
 
 namespace markdownItCpp {
 
-bool link(StateInline& state,bool silent) {
+bool image(StateInline& state,bool silent) {
     auto end   = state.posMax;
     auto start = state.pos;
     std::string_view label;
     std::string href,title;
     bool parseReference = true;
 
-    if( state.src[start] != '[') return false;
-    int labelStart = start+1;
-    int labelEnd = parseLinkLabel(state.src, start, end);
-    if( labelEnd < -1 ) return false; //没有找到
+    if( state.src[start++] != '!') return false;
+    if( state.src[start++] != '[') return false;
 
-    int pos = labelEnd+1;
+    int labelStart = start;
+    int labelEnd = parseLinkLabel(state.src, labelStart, end);
+    if( labelEnd < 0 ) return false;
+    label = state.slice(start, labelEnd);
+
+    int pos = labelEnd + 1;
+
     if( pos < end && state.src[pos] == '('){ // inline_link
-
         parseReference = false;
         pos++;
         // [link](  <href>  "title"  )
@@ -31,6 +34,7 @@ bool link(StateInline& state,bool silent) {
         auto res = parseLinkDestination(state.src, pos, state.posMax);
         if( res.ok ){ //解析成功
             href = std::move(res.str);
+            
             pos = res.pos;
             // [link](  <href>  "title"  )
             //                ^^ skipping these spaces
@@ -40,15 +44,15 @@ bool link(StateInline& state,bool silent) {
             if( pos < end && pos != posBack && res.ok){
                 title = std::move(res.str);
                 pos = res.pos;
-
                 // [link](  <href>  "title"  )
                 //                         ^^ skipping these spaces
                 pos = skipSpace(state.src, pos);
             }
+            if( pos >= end || state.src[pos] !=')'){
+                parseReference = true;
+            }
+            pos++; //过滤 )
         }
-        if( pos >= end || state.src[pos] != ')' )
-            parseReference = true;
-        pos++;
     }
 
     if(parseReference){
@@ -77,19 +81,16 @@ bool link(StateInline& state,bool silent) {
         state.pos = labelStart;
         state.posMax = labelEnd;
         auto & token = state.push(image_type ,img_tag,0);
-        token.attrPush("href", href);
+        token.attrPush("src", href);
         if( title.length() != 0)
             token.attrPush("title", title);
-        if( label.length() == 0)
-            token.attrPush("alt", "");
-        else
-            token.attrPush("alt", escapeHtml(label));
+        if( label.length() !=0)
+            token.attrPush("alt", std::string(label));
+        //state.md.inlineTokenize(state);
     }
-
     state.pos = pos;
     state.posMax = end;
     return true;
-
 }
 
 }

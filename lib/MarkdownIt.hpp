@@ -23,7 +23,7 @@ public:
   {
     options = { // default
       .html=false,
-      .xhtmlOut = false,
+      .xhtmlOut = true,
       .breaks = false,
       .langPrefix = "language-",
       .linkify = false,
